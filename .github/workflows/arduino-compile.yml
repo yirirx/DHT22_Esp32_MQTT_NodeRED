@@ -25,6 +25,6 @@ jobs:
           sketch-paths: |
             firmware/ESP32DHT22
           libraries: |
-            DHTesp
+            DHT sensor library for ESPx
             PubSubClient
           verbose: true
