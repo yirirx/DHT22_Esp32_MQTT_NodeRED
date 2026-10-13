@@ -1,0 +1,30 @@
+name: Compile ESP32 firmware
+
+on:
+  push:
+    paths:
+      - "firmware/**"
+      - ".github/workflows/arduino-compile.yml"
+  pull_request:
+    paths:
+      - "firmware/**"
+      - ".github/workflows/arduino-compile.yml"
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Compile ESP32 DHT22 sketch
+        uses: arduino/compile-sketches@v1
+        with:
+          fqbn: esp32:esp32:esp32
+          sketch-paths: |
+            firmware/ESP32DHT22
+          libraries: |
+            DHTesp
+            PubSubClient
+          verbose: true
