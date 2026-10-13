@@ -1,0 +1,458 @@
+[
+  {
+    "id": "tab-iot",
+    "type": "tab",
+    "label": "ESP32 DHT22 Reliability Monitor",
+    "disabled": false,
+    "info": "Dashboard for original numeric topics and diagnostic telemetry."
+  },
+  {
+    "id": "broker-public",
+    "type": "mqtt-broker",
+    "name": "HiveMQ public demo broker",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "20",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "1",
+    "willPayload": "offline",
+    "willMsg": {},
+    "sessionExpiry": ""
+  },
+  {
+    "id": "ui-tab",
+    "type": "ui_tab",
+    "name": "ESP32 Monitor",
+    "icon": "dashboard",
+    "disabled": false,
+    "hidden": false
+  },
+  {
+    "id": "ui-group-sensors",
+    "type": "ui_group",
+    "name": "Live Sensor Readings",
+    "tab": "ui-tab",
+    "order": 1,
+    "disp": true,
+    "width": "6",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "ui-group-health",
+    "type": "ui_group",
+    "name": "Diagnostics",
+    "tab": "ui-tab",
+    "order": 2,
+    "disp": true,
+    "width": "6",
+    "collapse": false,
+    "className": ""
+  },
+  {
+    "id": "mqtt-temp",
+    "type": "mqtt in",
+    "z": "tab-iot",
+    "name": "Temperature",
+    "topic": "iotfrontier/temperature",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker-public",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 150,
+    "y": 100,
+    "wires": [
+      [
+        "temp-number",
+        "temp-debug"
+      ]
+    ]
+  },
+  {
+    "id": "temp-number",
+    "type": "function",
+    "z": "tab-iot",
+    "name": "Convert temperature to number",
+    "func": "const n = Number(msg.payload); if (!Number.isFinite(n)) return null; msg.payload = n; return msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 100,
+    "wires": [
+      [
+        "temp-gauge",
+        "temp-chart"
+      ]
+    ]
+  },
+  {
+    "id": "temp-gauge",
+    "type": "ui_gauge",
+    "z": "tab-iot",
+    "name": "Temperature gauge",
+    "group": "ui-group-sensors",
+    "order": 1,
+    "width": 6,
+    "height": 4,
+    "gtype": "gage",
+    "title": "Temperature",
+    "label": "°C",
+    "format": "{{value | number:1}}",
+    "min": "-10",
+    "max": "60",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "25",
+    "seg2": "40",
+    "diff": false,
+    "className": "",
+    "x": 650,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "temp-chart",
+    "type": "ui_chart",
+    "z": "tab-iot",
+    "name": "Temperature history",
+    "group": "ui-group-sensors",
+    "order": 2,
+    "width": 6,
+    "height": 4,
+    "label": "Temperature history (°C)",
+    "chartType": "line",
+    "legend": "false",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "Waiting for data",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#1f77b4",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 650,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "temp-debug",
+    "type": "debug",
+    "z": "tab-iot",
+    "name": "Temperature payload",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 390,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "mqtt-humidity",
+    "type": "mqtt in",
+    "z": "tab-iot",
+    "name": "Humidity",
+    "topic": "iotfrontier/humidity",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker-public",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 240,
+    "wires": [
+      [
+        "humidity-number"
+      ]
+    ]
+  },
+  {
+    "id": "humidity-number",
+    "type": "function",
+    "z": "tab-iot",
+    "name": "Convert humidity to number",
+    "func": "const n = Number(msg.payload); if (!Number.isFinite(n)) return null; msg.payload = n; return msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 240,
+    "wires": [
+      [
+        "humidity-gauge",
+        "humidity-chart"
+      ]
+    ]
+  },
+  {
+    "id": "humidity-gauge",
+    "type": "ui_gauge",
+    "z": "tab-iot",
+    "name": "Humidity gauge",
+    "group": "ui-group-sensors",
+    "order": 3,
+    "width": 6,
+    "height": 4,
+    "gtype": "gage",
+    "title": "Relative humidity",
+    "label": "% RH",
+    "format": "{{value | number:1}}",
+    "min": 0,
+    "max": "100",
+    "colors": [
+      "#00b500",
+      "#e6e600",
+      "#ca3838"
+    ],
+    "seg1": "40",
+    "seg2": "70",
+    "diff": false,
+    "className": "",
+    "x": 650,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "humidity-chart",
+    "type": "ui_chart",
+    "z": "tab-iot",
+    "name": "Humidity history",
+    "group": "ui-group-sensors",
+    "order": 4,
+    "width": 6,
+    "height": 4,
+    "label": "Humidity history (% RH)",
+    "chartType": "line",
+    "legend": "false",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "Waiting for data",
+    "dot": false,
+    "ymin": "0",
+    "ymax": "100",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": 0,
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#1f77b4",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 650,
+    "y": 280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "mqtt-telemetry",
+    "type": "mqtt in",
+    "z": "tab-iot",
+    "name": "Structured telemetry",
+    "topic": "iotfrontier/telemetry",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker-public",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 160,
+    "y": 380,
+    "wires": [
+      [
+        "parse-telemetry"
+      ]
+    ]
+  },
+  {
+    "id": "parse-telemetry",
+    "type": "json",
+    "z": "tab-iot",
+    "name": "Parse telemetry JSON",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 390,
+    "y": 380,
+    "wires": [
+      [
+        "debug-telemetry"
+      ]
+    ]
+  },
+  {
+    "id": "debug-telemetry",
+    "type": "debug",
+    "z": "tab-iot",
+    "name": "Telemetry JSON",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 630,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "mqtt-health",
+    "type": "mqtt in",
+    "z": "tab-iot",
+    "name": "Device health",
+    "topic": "iotfrontier/health",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "broker-public",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 440,
+    "wires": [
+      [
+        "parse-health"
+      ]
+    ]
+  },
+  {
+    "id": "parse-health",
+    "type": "json",
+    "z": "tab-iot",
+    "name": "Parse health JSON",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 380,
+    "y": 440,
+    "wires": [
+      [
+        "debug-health"
+      ]
+    ]
+  },
+  {
+    "id": "debug-health",
+    "type": "debug",
+    "z": "tab-iot",
+    "name": "Health JSON",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 610,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "mqtt-status",
+    "type": "mqtt in",
+    "z": "tab-iot",
+    "name": "Device status",
+    "topic": "iotfrontier/status",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "broker-public",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 500,
+    "wires": [
+      [
+        "debug-status"
+      ]
+    ]
+  },
+  {
+    "id": "debug-status",
+    "type": "debug",
+    "z": "tab-iot",
+    "name": "Online/offline status",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 390,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "comment",
+    "type": "comment",
+    "z": "tab-iot",
+    "name": "Public broker is for demonstration only; use a private TLS broker for sensitive or production deployments.",
+    "info": "",
+    "x": 360,
+    "y": 40,
+    "wires": []
+  }
+]
