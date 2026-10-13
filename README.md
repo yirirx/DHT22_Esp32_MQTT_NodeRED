@@ -55,7 +55,7 @@ The firmware currently uses **GPIO 15** for the DHT22 data line. Match the wirin
 
 ## Run it
 
-1. Open `Wokwi_ESP32_DHT22_code.ino` in Arduino IDE or a compatible Wokwi project.
+1. Open `firmware/ESP32DHT22/ESP32DHT22.ino` in Arduino IDE or a compatible Wokwi project. The root-level `Wokwi_ESP32_DHT22_code.ino` is retained as the upstream-compatible entry point.
 2. Set the correct board and verify `DHT_PIN` matches your sensor wiring.
 3. Configure `WIFI_SSID`, `WIFI_PASSWORD`, `MQTT_HOST`, and `MQTT_PORT` in the `Config` section.
 4. Install the libraries listed above and compile/upload the firmware.
@@ -96,7 +96,7 @@ This repository is derived from the original project by [Hariharnath Paduchuru](
 
 ## Next steps
 
-- [ ] Verify the firmware compiles for the selected ESP32 board.
+- [ ] Verify the firmware compiles for the selected ESP32 board (a GitHub Actions compile workflow is included).
 - [ ] Verify GPIO wiring in Wokwi or on hardware.
 - [ ] Run normal-operation and disconnect/reconnect tests.
 - [ ] Capture a real dashboard screenshot from this modified version.
